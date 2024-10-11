@@ -198,22 +198,25 @@ const GenerateLinks = () => {
   return (
     <>
       <main className="p-3">
-        <h1 className="text-3xl font-bold mb-1">
-          Customize your links
-          <span
-            className={`${
-              reorderLinkLoading
-                ? "text-blue-500 text-[10px] font-bold ml-5"
-                : "text-green-500 font-normal"
-            }`}
-          >
-            {reorderLinkLoading && "Updating Order..."}
-          </span>
-        </h1>
-        <small className="text-gray-400">
-          Add/edit/remove links below and then share all your profiles with the
-          world!
-        </small>
+        {/* //top section */}
+        <section>
+          <h1 className="text-3xl font-bold mb-1">
+            Customize your links
+            <span
+              className={`${
+                reorderLinkLoading
+                  ? "text-blue-500 text-[10px] font-bold ml-5"
+                  : "text-green-500 font-normal"
+              }`}
+            >
+              {reorderLinkLoading && "Updating Order..."}
+            </span>
+          </h1>
+          <small className="text-gray-400">
+            Add/edit/remove links below and then share all your profiles with
+            the world!
+          </small>
+        </section>
 
         {/* Add new link button */}
         <section className="my-4">
