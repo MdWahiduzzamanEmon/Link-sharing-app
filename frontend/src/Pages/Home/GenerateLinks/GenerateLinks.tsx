@@ -128,11 +128,12 @@ const GenerateLinks = () => {
       return;
     }
 
-    const datas = links?.map((link) => {
+    const datas = links?.map((link: any) => {
       return {
+        id: link?.deleteId,
         platform: link?.platform,
         link: link?.url,
-        order: getLink?.data?.length + 1,
+        // order: getLink?.data?.length + 1,
       };
     });
 

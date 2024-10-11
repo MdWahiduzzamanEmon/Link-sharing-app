@@ -30,7 +30,7 @@ export const deleteAllLinks = async () => {
 export const deleteOneLink = async (id: string) => {
   const result = db.saveSocialLinks.delete({
     where: {
-      id: id?.toString(),
+      order: parseInt(id),
     },
   });
 

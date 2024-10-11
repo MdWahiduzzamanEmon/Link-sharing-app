@@ -41,7 +41,7 @@ const LinkCard = ({
 
     if (res.isConfirmed) {
       // delete link
-      const result = await deleteOneLink(link?.deleteId).unwrap();
+      const result = await deleteOneLink(link?.id).unwrap();
       if (result?.status === 200) {
         Swal.fire("Deleted!", "Your link has been deleted.", "success");
         // remove link from state
