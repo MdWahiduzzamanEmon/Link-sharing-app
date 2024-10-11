@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomButton from "../../../Shared/CustomButton/CustomButton";
 import CustomSelect from "../../../Shared/CustomSelect/CustomSelect";
 import Swal from "sweetalert2";
@@ -31,14 +31,28 @@ const GenerateLinks = () => {
     // { id: 2, platform: "LinkedIn", url: "https://linkedin.com/in/myprofile" },
   ]);
 
-  const { data } = useGetLinksQuery(
+  const { data: getLink, isSuccess: getLinkSucess } = useGetLinksQuery(
     {},
     {
       refetchOnMountOrArgChange: true,
     }
   );
 
-  console.log(data, "data");
+  useEffect(() => {
+    if (getLinkSucess) {
+      const newLinks = getLink?.data?.map((link: any) => ({
+        id: link?.order,
+        platform: link?.platform,
+        url: link?.link,
+      }));
+
+      if (newLinks?.length > 0) {
+        setLinks(newLinks);
+      } else {
+        setLinks(links);
+      }
+    }
+  }, [getLinkSucess, getLink?.data]);
 
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
@@ -95,10 +109,7 @@ const GenerateLinks = () => {
     e.preventDefault(); // Allow the drop by preventing default behavior
   };
 
-  const [
-    postLink,
-    { isLoading: isSaveLinkLoading, isSuccess: isSaveLinkSuccess },
-  ] = usePostLinkMutation();
+  const [postLink, { isLoading: isSaveLinkLoading }] = usePostLinkMutation();
   const handleSaveLinkInBackendAPI = async () => {
     // Save links in backend API
 
@@ -111,7 +122,7 @@ const GenerateLinks = () => {
       return {
         platform: link?.platform,
         link: link?.url,
-        // order: link?.id,
+        order: link?.id,
       };
     });
 
