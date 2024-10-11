@@ -1,9 +1,10 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import CustomButton from "../../Shared/CustomButton/CustomButton";
 import navLinks from "../../constant/navLinks";
 
 const Header: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <>
       <nav className="flex items-center justify-between flex-wrap bg-[#FFFFFF] p-3 text-black rounded shadow-sm mt-2">
@@ -28,7 +29,11 @@ const Header: React.FC = () => {
         </section>
 
         {/* right section */}
-        <CustomButton label="Preview" color="purple" />
+        <CustomButton
+          label="Preview"
+          color="purple"
+          onClick={() => navigate("/preview")}
+        />
       </nav>
     </>
   );

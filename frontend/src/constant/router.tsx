@@ -7,6 +7,7 @@ import {
   Home,
   ProfileDetails,
 } from "../Components/Paths";
+import Preview from "../Pages/Preview/Preview";
 // import Error from "../Components/Error/Error";
 
 const router = [
@@ -47,6 +48,15 @@ const router = [
         ],
       },
 
+      // Preview
+      {
+        path: "preview",
+        element: (
+          <SuspenseGlobal>
+            <Preview />
+          </SuspenseGlobal>
+        ),
+      },
       // 404
       {
         path: "*",

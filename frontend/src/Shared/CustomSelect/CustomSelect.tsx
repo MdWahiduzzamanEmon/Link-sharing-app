@@ -1,22 +1,5 @@
 import React from "react";
-
-export const platforms = [
-  "GitHub",
-  "LinkedIn",
-  "Facebook",
-  "Twitter",
-  "Instagram",
-  "Youtube",
-];
-
-const platformIcons: { [key in (typeof platforms)[number]]: string } = {
-  GitHub: "🌐",
-  LinkedIn: "🔗",
-  Facebook: "🔗",
-  Twitter: "🔗",
-  Instagram: "🔗",
-  Youtube: "🔗",
-};
+import { getStyle, platforms } from "../../constant";
 
 const CustomSelect: React.FC<{
   label?: string;
@@ -35,8 +18,13 @@ const CustomSelect: React.FC<{
       {/* Icon + Select */}
       <div className="relative flex items-center border border-gray-300 rounded-md shadow-sm">
         {/* Icon on the left */}
-        <span className="absolute left-2">{platformIcons[value] || "🌐"}</span>
+        {/* <span className="absolute left-2">{platformIcons[value] || "🌐"}</span> */}
 
+        <img
+          src={getStyle(value)?.image}
+          alt=""
+          className="absolute left-2 w-5 h-5 object-cover"
+        />
         {/* Select Dropdown */}
         <select
           value={value}
