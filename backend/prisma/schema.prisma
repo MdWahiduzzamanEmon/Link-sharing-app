@@ -37,7 +37,7 @@ model SaveSocialLinks {
   userId    String?
   platform  String
   link      String
-  order     Int      @unique @default(autoincrement())
+  order     Int      @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

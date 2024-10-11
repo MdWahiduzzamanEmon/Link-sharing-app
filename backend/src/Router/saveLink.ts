@@ -5,6 +5,7 @@ import {
   deleteOneLink,
   getSaveLinks,
   postSaveLinks,
+  reorderLinks,
 } from "../Services/saveLinks.service";
 
 export const linkSaveRouter = express.Router();
@@ -101,6 +102,33 @@ linkSaveRouter.delete(
       res.status(200).json({
         status: 200,
         message: "Links deleted successfully",
+      });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  }
+);
+
+//reorder link
+
+linkSaveRouter.put(
+  "/reorderLink",
+  async (req: Request, res: Response, next: any) => {
+    try {
+      if (Object.keys(req?.body)?.length === 0) {
+        return next(new Error("orderId and orderIdNewPosition are required"));
+      }
+
+      const result = await reorderLinks(req?.body);
+      if (!result) {
+        return next(new Error("Something went wrong while reordering links"));
+      }
+
+      res.status(200).json({
+        status: 200,
+        message: "Links reordered successfully",
+        data: result,
       });
     } catch (err) {
       console.log(err);

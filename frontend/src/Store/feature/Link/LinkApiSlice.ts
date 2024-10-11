@@ -45,6 +45,15 @@ const LinkApiSlice = apiSlice.injectEndpoints({
       }),
       // invalidatesTags: ["links"],
     }),
+
+    //reorderLink
+    reorderLink: builder.mutation({
+      query: (body: any) => ({
+        url: "/reorderLink",
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -52,4 +61,5 @@ export const {
   usePostLinkMutation,
   useGetLinksQuery,
   useDeleteOneLinkMutation,
+  useReorderLinkMutation,
 } = LinkApiSlice;

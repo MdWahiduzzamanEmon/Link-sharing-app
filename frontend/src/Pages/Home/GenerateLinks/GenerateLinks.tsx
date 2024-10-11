@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import {
   useGetLinksQuery,
   usePostLinkMutation,
+  useReorderLinkMutation,
 } from "../../../Store/feature/Link/LinkApiSlice";
 import LinkCard from "./LinkCard/LinkCard";
 import Loader from "../../../Shared/Loader/Loader";
@@ -80,6 +81,17 @@ const GenerateLinks = () => {
     setDraggedIndex(index);
   };
 
+  const [
+    reorderLink,
+    { isLoading: reorderLinkLoading, isSuccess: reorderLinkSuccess },
+  ] = useReorderLinkMutation();
+
+  useEffect(() => {
+    if (reorderLinkSuccess) {
+      Swal.fire("Success", "Link Re-ordered Successfully", "success");
+    }
+  }, [reorderLinkSuccess]);
+
   // Handle drop
   const handleDrop = (index: number) => {
     if (draggedIndex === null) return;
@@ -88,7 +100,7 @@ const GenerateLinks = () => {
     reorderedLinks.splice(index, 0, draggedLink);
 
     setLinks(reorderedLinks);
-    console.log("links", reorderedLinks);
+    // console.log("links", reorderedLinks);
     // get current position and new position
     // {
     //   "items": [
@@ -99,16 +111,20 @@ const GenerateLinks = () => {
     // }
 
     if (reorderedLinks?.length > 0) {
-      const data = {
-        items: reorderedLinks?.map((link: any, index: number) => {
-          return {
-            ...link,
-            newPosition: index + 1,
-          };
-        }),
-      };
+      const data = reorderedLinks?.map((link: any, index: number) => {
+        return {
+          ...link,
+          orderId: link?.id,
+          orderIdNewPosition: index + 1,
+        };
+      });
 
-      console.log("data", data);
+      //debounce call
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(reorderLink(data));
+        }, 1000);
+      });
     }
 
     setDraggedIndex(null); // Reset the dragged index
@@ -128,6 +144,7 @@ const GenerateLinks = () => {
       return;
     }
 
+    let newArray = [];
     const datas = links?.map((link: any) => {
       return {
         id: link?.deleteId,
@@ -137,8 +154,21 @@ const GenerateLinks = () => {
       };
     });
 
+    //if datas array is already in getLink?.data then remove and only add new links
+
+    for (let i = 0; i < datas?.length; i++) {
+      const data = getLink?.data?.find(
+        (link: any) => link?.id === datas[i]?.id
+      );
+      if (!data) {
+        newArray.push(datas[i]);
+      }
+    }
+
+    // console.log("datas", newArray);
+
     try {
-      const res = await postLink(datas).unwrap();
+      const res = await postLink(newArray).unwrap();
       // console.log("res", res);
       if (res.status === 200) {
         Swal.fire({
