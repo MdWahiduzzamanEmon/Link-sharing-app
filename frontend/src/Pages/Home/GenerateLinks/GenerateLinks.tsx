@@ -8,26 +8,9 @@ import {
 } from "../../../Store/feature/Link/LinkApiSlice";
 import LinkCard from "./LinkCard/LinkCard";
 import Loader from "../../../Shared/Loader/Loader";
+import { DEFAULT, validateLink } from "../../../constant";
 
 // Helper function to validate URLs based on platform
-
-interface VALIDATE_LINK {
-  platform: string;
-  url: string;
-}
-
-export const validateLink = ({ platform, url }: VALIDATE_LINK) => {
-  let isValid = false;
-  const isMatched =
-    url?.includes(platform?.toLowerCase()) &&
-    url?.includes(".") &&
-    url?.includes("://");
-  if (isMatched) isValid = true;
-
-  return isValid;
-};
-
-export const DEFAULT = [{ id: 1, platform: "", url: "" }];
 
 const GenerateLinks = () => {
   const [links, setLinks] = useState(DEFAULT);
@@ -63,7 +46,12 @@ const GenerateLinks = () => {
 
   // Handle Add New Link
   const handleAddLink = () => {
-    const newLink = { id: links?.length + 1, platform: "", url: "" };
+    const newLink = {
+      id: Date.now(),
+      order: null,
+      platform: "",
+      url: "",
+    };
     setLinks([newLink, ...links]);
   };
 
@@ -90,11 +78,11 @@ const GenerateLinks = () => {
     },
   ] = useReorderLinkMutation();
 
-  useEffect(() => {
-    if (reorderLinkSuccess) {
-      Swal.fire("Success", "Link Re-ordered Successfully", "success");
-    }
-  }, [reorderLinkSuccess]);
+  // useEffect(() => {
+  //   if (reorderLinkSuccess) {
+  //     Swal.fire("Success", "Link Re-ordered Successfully", "success");
+  //   }
+  // }, [reorderLinkSuccess]);
 
   useEffect(() => {
     if (reorderLinkError) {
@@ -153,28 +141,32 @@ const GenerateLinks = () => {
       return;
     }
 
-    const newArray = [];
+    const newArray: { order: any; id: any; platform: any; link: any }[] = [];
+
     const datas = links?.map((link: any) => {
       return {
-        id: link?.deleteId,
+        order: link?.order,
+        id: link?.id,
         platform: link?.platform,
         link: link?.url,
-        // order: getLink?.data?.length + 1,
       };
     });
 
-    //if datas array is already in getLink?.data then remove and only add new links
-
-    for (let i = 0; i < datas?.length; i++) {
-      const data = getLink?.data?.find(
-        (link: any) => link?.id === datas[i]?.id
-      );
-      if (!data) {
-        newArray.push(datas[i]);
-      }
+    //only not null order id save in new array
+    if (datas?.length > 0) {
+      //only null order id save
+      datas?.forEach((data: any) => {
+        if (data?.order === null) {
+          newArray.push(data);
+        }
+      });
     }
 
     // console.log("datas", newArray);
+
+    if (newArray?.length === 0) {
+      return;
+    }
 
     try {
       const res = await postLink(newArray).unwrap();
@@ -206,7 +198,18 @@ const GenerateLinks = () => {
   return (
     <>
       <main className="p-3">
-        <h1 className="text-3xl font-bold mb-1">Customize your links</h1>
+        <h1 className="text-3xl font-bold mb-1">
+          Customize your links
+          <span
+            className={`${
+              reorderLinkLoading
+                ? "text-blue-500 text-[10px] font-bold ml-5"
+                : "text-green-500 font-normal"
+            }`}
+          >
+            {reorderLinkLoading && "Updating Order..."}
+          </span>
+        </h1>
         <small className="text-gray-400">
           Add/edit/remove links below and then share all your profiles with the
           world!

@@ -1,8 +1,8 @@
 import React from "react";
 import CustomSelect from "../../../../Shared/CustomSelect/CustomSelect";
-import { DEFAULT, validateLink } from "../GenerateLinks";
 import { useDeleteOneLinkMutation } from "../../../../Store/feature/Link/LinkApiSlice";
 import Swal from "sweetalert2";
+import { DEFAULT, validateLink } from "../../../../constant";
 
 interface Props {
   link: any;
@@ -29,6 +29,23 @@ const LinkCard = ({
     useDeleteOneLinkMutation();
   // Handle Remove Link
   const handleRemoveLink = async (link: any) => {
+    const filterIsLinkOrPlatFormHasValue = links?.find(
+      (l) => l?.id === link?.id
+    );
+    if (
+      !filterIsLinkOrPlatFormHasValue?.platform ||
+      !filterIsLinkOrPlatFormHasValue?.url ||
+      filterIsLinkOrPlatFormHasValue?.order === null
+    ) {
+      const newData = links.filter((l) => l.id !== link?.id);
+      if (newData?.length > 0) {
+        setLinks(newData);
+      } else {
+        setLinks(DEFAULT);
+      }
+      return;
+    }
+
     const res = await Swal.fire({
       title: "Are you sure?",
       text: "You want to delete this link!",
@@ -72,7 +89,7 @@ const LinkCard = ({
         {/* Drag Icon and Label */}
         <div className="flex items-center text-[13px] text-gray-500 font-bold">
           <span className="mr-3 cursor-move">⠿</span> {/* Drag Icon */}
-          <span>{`Link #${link?.id}`}</span>
+          <span>{`Link #${index + 1}`}</span>
         </div>
         {/* Remove Button */}
         <button

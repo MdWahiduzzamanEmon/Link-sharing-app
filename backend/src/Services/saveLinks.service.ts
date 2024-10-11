@@ -38,7 +38,7 @@ export const deleteOneLink = async (id: string) => {
 };
 
 export const reorderLinks = async (data: any[]) => {
-  console.log(data);
+//   console.log(data);
   const [result] = await Promise.all(
     data?.map((link: any) => {
       return db.saveSocialLinks.update({
