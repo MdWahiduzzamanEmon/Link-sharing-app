@@ -32,16 +32,6 @@ export const uploadMiddleware = async (req: any, res: any, next: any) => {
       return res.status(500).json({ message: err });
     }
 
-    // [{
-    //   fieldname: 'nidORbirth_image',
-    //   originalname: '1673576127630.jpeg',
-    //   encoding: '7bit',
-    //   mimetype: 'image/jpeg',
-    //   destination: 'uploadFile',
-    //   filename: '2023-08-05-1673576127630.jpeg',
-    //   path: 'uploadFile/2023-08-05-1673576127630.jpeg',
-    //   size: 85172
-    // }]
     // send with field name and path
     req.fileUrl =
       req?.files?.length > 0
