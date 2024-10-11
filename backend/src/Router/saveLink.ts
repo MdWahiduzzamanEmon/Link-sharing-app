@@ -116,11 +116,12 @@ linkSaveRouter.put(
   "/reorderLink",
   async (req: Request, res: Response, next: any) => {
     try {
-      if (Object.keys(req?.body)?.length === 0) {
-        return next(new Error("orderId and orderIdNewPosition are required"));
+      const { items } = req.body;
+      if (!items || !Array.isArray(items)) {
+        return next(new Error("Body is not an array"));
       }
 
-      const result = await reorderLinks(req?.body);
+      const result = await reorderLinks(items);
       if (!result) {
         return next(new Error("Something went wrong while reordering links"));
       }
@@ -128,7 +129,6 @@ linkSaveRouter.put(
       res.status(200).json({
         status: 200,
         message: "Links reordered successfully",
-        data: result,
       });
     } catch (err) {
       console.log(err);

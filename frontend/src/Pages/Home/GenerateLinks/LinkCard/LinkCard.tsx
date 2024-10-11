@@ -72,7 +72,7 @@ const LinkCard = ({
         {/* Drag Icon and Label */}
         <div className="flex items-center text-[13px] text-gray-500 font-bold">
           <span className="mr-3 cursor-move">⠿</span> {/* Drag Icon */}
-          <span>{`Link #${link?.id}`}</span>
+          <span>{`Link #${link?.order}`}</span>
         </div>
         {/* Remove Button */}
         <button

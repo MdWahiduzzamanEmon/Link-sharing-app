@@ -47,8 +47,8 @@ const GenerateLinks = () => {
   useEffect(() => {
     if (getLinkSucess) {
       const newLinks = getLink?.data?.map((link: any) => ({
-        deleteId: link?.id,
-        id: link?.order,
+        id: link?.id,
+        order: link?.order,
         platform: link?.platform,
         url: link?.link,
       }));
@@ -111,13 +111,12 @@ const GenerateLinks = () => {
     // }
 
     if (reorderedLinks?.length > 0) {
-      const data = reorderedLinks?.map((link: any, index: number) => {
-        return {
-          ...link,
-          orderId: link?.id,
+      const data = {
+        items: reorderedLinks?.map((link: any, index) => ({
+          id: link?.id,
           orderIdNewPosition: index + 1,
-        };
-      });
+        })),
+      };
 
       //debounce call
       new Promise((resolve) => {
@@ -144,7 +143,7 @@ const GenerateLinks = () => {
       return;
     }
 
-    let newArray = [];
+    const newArray = [];
     const datas = links?.map((link: any) => {
       return {
         id: link?.deleteId,
