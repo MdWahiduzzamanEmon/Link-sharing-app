@@ -24,10 +24,11 @@ CREATE TABLE "Profile" (
 
 -- CreateTable
 CREATE TABLE "SaveSocialLinks" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "userId" TEXT,
     "platform" TEXT NOT NULL,
     "link" TEXT NOT NULL,
+    "order" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -36,3 +37,6 @@ CREATE TABLE "SaveSocialLinks" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SaveSocialLinks_order_key" ON "SaveSocialLinks"("order");
