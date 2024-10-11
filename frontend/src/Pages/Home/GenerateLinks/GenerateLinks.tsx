@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import CustomButton from "../../../Shared/CustomButton/CustomButton";
 import CustomSelect from "../../../Shared/CustomSelect/CustomSelect";
 import Swal from "sweetalert2";
+import {
+  useGetLinksQuery,
+  usePostLinkMutation,
+} from "../../../Store/feature/Link/LinkApiSlice";
 
 // Helper function to validate URLs based on platform
 
@@ -26,6 +30,15 @@ const GenerateLinks = () => {
     { id: 1, platform: "", url: "" },
     // { id: 2, platform: "LinkedIn", url: "https://linkedin.com/in/myprofile" },
   ]);
+
+  const { data } = useGetLinksQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
+
+  console.log(data, "data");
 
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
@@ -80,6 +93,53 @@ const GenerateLinks = () => {
   // Handle drag over
   const handleDragOver = (e: { preventDefault: () => void }) => {
     e.preventDefault(); // Allow the drop by preventing default behavior
+  };
+
+  const [
+    postLink,
+    { isLoading: isSaveLinkLoading, isSuccess: isSaveLinkSuccess },
+  ] = usePostLinkMutation();
+  const handleSaveLinkInBackendAPI = async () => {
+    // Save links in backend API
+
+    // if links array has platform and url then only save the link
+    if (links?.every((link) => !validateLink(link))) {
+      return;
+    }
+
+    const datas = links?.map((link) => {
+      return {
+        platform: link?.platform,
+        link: link?.url,
+        // order: link?.id,
+      };
+    });
+
+    try {
+      const res = await postLink(datas).unwrap();
+      // console.log("res", res);
+      if (res.status === 200) {
+        Swal.fire({
+          title: `${res?.data?.count} links saved successfully`,
+          icon: "success",
+          confirmButtonText: "Ok",
+        });
+        // setLinks([{ id: 1, platform: "", url: "" }]);
+      } else {
+        Swal.fire({
+          title: "Something went wrong",
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      Swal.fire({
+        title: "Something went wrong",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
+    }
   };
 
   return (
@@ -180,6 +240,7 @@ const GenerateLinks = () => {
           <CustomButton
             label="Save"
             variant="filled"
+            loading={isSaveLinkLoading}
             disabled={
               !links?.length ||
               links?.some(
@@ -187,6 +248,7 @@ const GenerateLinks = () => {
                   !validateLink({ platform: link.platform, url: link.url })
               )
             }
+            onClick={handleSaveLinkInBackendAPI}
           />
         </section>
       </main>

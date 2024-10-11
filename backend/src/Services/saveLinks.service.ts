@@ -1,35 +1,33 @@
 import { db } from "../utils/db.server";
 
-export const postSaveLinks = () => {
-  const result = db.saveSocialLinks.createMany({
-    data: [
-      {
-        link: "https://github.com/MdWahiduzzamanEmon",
-        platform: "GitHub",
-        order: 0,
-      },
-      {
-        link: "https://www.linkedin.com/in/mdwahiduzzamanemon/",
-        platform: "LinkedIn",
-        order: 0,
-      },
-      {
-        link: "https://www.facebook.com/mdwahiduzzamanemon/",
-        platform: "Facebook",
-        order: 0,
-      },
-      {
-        link: "https://twitter.com/mdwahiduzzamanemon",
-        platform: "Twitter",
-        order: 0,
-      },
-      {
-        link: "https://www.instagram.com/mdwahiduzzamanemon/",
-        platform: "Instagram",
-        order: 0,
-      },
-    ],
+export const postSaveLinks = async (body: any[]) => {
+  const maxOrder = await db.saveSocialLinks.aggregate({
+    _max: {
+      order: true,
+    },
   });
+
+  const result = db.saveSocialLinks.createMany({
+    data: body.map((link) => {
+      return {
+        ...link,
+        order: (maxOrder._max.order || 0) + 1,
+      };
+    }),
+  });
+
+  return result;
+};
+
+export const getSaveLinks = () => {
+  const result = db.saveSocialLinks.findMany();
+
+  return result;
+};
+
+//delete all
+export const deleteAllLinks = async () => {
+  const result = db.saveSocialLinks.deleteMany();
 
   return result;
 };

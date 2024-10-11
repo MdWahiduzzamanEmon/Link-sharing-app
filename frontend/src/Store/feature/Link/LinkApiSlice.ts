@@ -4,7 +4,16 @@ import { apiSlice } from "../../api/apiSlice";
 const LinkApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder: {
     mutation: (arg0: {
-      query: (body: any) => { url: string; method: string; body: any };
+      query: (body: any) => {
+        url: string;
+        method: string;
+        body: any;
+      };
+      invalidatesTags?: string[];
+    }) => any;
+    query: (arg0: {
+      query: () => { url: string; method: string };
+      providesTags?: string[];
     }) => any;
   }) => ({
     postLink: builder.mutation({
@@ -13,8 +22,21 @@ const LinkApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
+
+      invalidatesTags: ["links"],
+    }),
+
+    //getLinks
+
+    getLinks: builder.query({
+      query: () => ({
+        url: "/getLinks",
+        method: "GET",
+      }),
+
+      providesTags: ["links"],
     }),
   }),
 });
 
-export const {} = LinkApiSlice;
+export const { usePostLinkMutation, useGetLinksQuery } = LinkApiSlice;

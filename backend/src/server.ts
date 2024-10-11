@@ -44,7 +44,11 @@ app.get("/linkShare", async (_req, res) => {
 //error middleware
 app.use((err: any, req: any, res: any, next: any) => {
   console.error(err.message);
-  res.status(400).json({ message: err.message });
+  res.status(400).json({
+    success: false,
+    status: 400,
+    message: err?.message,
+  });
 });
 
 // Start server
