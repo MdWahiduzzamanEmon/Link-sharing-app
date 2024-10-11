@@ -3,6 +3,7 @@ import CustomButton from "../../../Shared/CustomButton/CustomButton";
 import CustomSelect from "../../../Shared/CustomSelect/CustomSelect";
 import Swal from "sweetalert2";
 import {
+  useDeleteOneLinkMutation,
   useGetLinksQuery,
   usePostLinkMutation,
 } from "../../../Store/feature/Link/LinkApiSlice";
@@ -41,6 +42,7 @@ const GenerateLinks = () => {
   useEffect(() => {
     if (getLinkSucess) {
       const newLinks = getLink?.data?.map((link: any) => ({
+        deleteId: link?.id,
         id: link?.order,
         platform: link?.platform,
         url: link?.link,
@@ -62,8 +64,10 @@ const GenerateLinks = () => {
     setLinks([newLink, ...links]);
   };
 
+  const [deleteOneLink, { isLoading: isDeleteLinkLoading }] =
+    useDeleteOneLinkMutation();
   // Handle Remove Link
-  const handleRemoveLink = async (id: number) => {
+  const handleRemoveLink = async (link: any) => {
     const res = await Swal.fire({
       title: "Are you sure?",
       text: "You want to delete this link!",
@@ -75,7 +79,20 @@ const GenerateLinks = () => {
     });
 
     if (res.isConfirmed) {
-      setLinks(links.filter((link) => link.id !== id));
+      // delete link
+      const result = await deleteOneLink(link?.deleteId).unwrap();
+      if (result?.status === 200) {
+        Swal.fire("Deleted!", "Your link has been deleted.", "success");
+        // remove link from state
+        const newData = links.filter((l) => l.id !== link?.id);
+        if (newData?.length > 0) {
+          setLinks(newData);
+        } else {
+          setLinks([{ id: 1, platform: "", url: "" }]);
+        }
+      } else {
+        Swal.fire("Failed!", "Something went wrong.", "error");
+      }
     }
   };
 
@@ -172,7 +189,7 @@ const GenerateLinks = () => {
         </section>
 
         {/* Links List */}
-        <section>
+        <section className="h-[500px] overflow-y-auto">
           {links?.length > 0 ? (
             links?.map((link, index) => (
               <div
@@ -195,10 +212,10 @@ const GenerateLinks = () => {
                   </div>
                   {/* Remove Button */}
                   <button
-                    onClick={() => handleRemoveLink(link.id)}
+                    onClick={() => handleRemoveLink(link)}
                     className="text-gray-500 ml-3 text-[13px] text-semibold hover:text-red-500"
                   >
-                    Remove
+                    {isDeleteLinkLoading ? "Deleting..." : "Remove"}
                   </button>
                 </section>
                 <section className="flex justify-between flex-col gap-5 w-full">

@@ -7,7 +7,7 @@ const LinkApiSlice = apiSlice.injectEndpoints({
       query: (body: any) => {
         url: string;
         method: string;
-        body: any;
+        body?: any;
       };
       invalidatesTags?: string[];
     }) => any;
@@ -36,7 +36,20 @@ const LinkApiSlice = apiSlice.injectEndpoints({
 
       providesTags: ["links"],
     }),
+
+    //delete one link
+    deleteOneLink: builder.mutation({
+      query: (id: string) => ({
+        url: `/deleteOneLink/${id}`,
+        method: "DELETE",
+      }),
+      // invalidatesTags: ["links"],
+    }),
   }),
 });
 
-export const { usePostLinkMutation, useGetLinksQuery } = LinkApiSlice;
+export const {
+  usePostLinkMutation,
+  useGetLinksQuery,
+  useDeleteOneLinkMutation,
+} = LinkApiSlice;

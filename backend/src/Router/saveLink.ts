@@ -1,6 +1,11 @@
 import express from "express";
 import { Request, Response } from "express";
-import { deleteAllLinks, getSaveLinks, postSaveLinks } from "../Services/saveLinks.service";
+import {
+  deleteAllLinks,
+  deleteOneLink,
+  getSaveLinks,
+  postSaveLinks,
+} from "../Services/saveLinks.service";
 
 export const linkSaveRouter = express.Router();
 
@@ -72,6 +77,30 @@ linkSaveRouter.delete(
         status: 200,
         message: "Links deleted successfully",
         data: result,
+      });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  }
+);
+
+//delete one link
+
+linkSaveRouter.delete(
+  "/deleteOneLink/:id",
+  async (req: Request, res: Response, next: any) => {
+    try {
+      const { id } = req.params;
+      console.log(id);
+      const result = await deleteOneLink(id);
+      if (!result) {
+        return next(new Error("Something went wrong while deleting links"));
+      }
+
+      res.status(200).json({
+        status: 200,
+        message: "Links deleted successfully",
       });
     } catch (err) {
       console.log(err);

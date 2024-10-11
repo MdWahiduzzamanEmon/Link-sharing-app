@@ -24,3 +24,15 @@ export const deleteAllLinks = async () => {
 
   return result;
 };
+
+// delete one
+
+export const deleteOneLink = async (id: string) => {
+  const result = db.saveSocialLinks.delete({
+    where: {
+      id: id?.toString(),
+    },
+  });
+
+  return result;
+};
