@@ -41,6 +41,12 @@ app.get("/linkShare", async (_req, res) => {
   res.send("HELLO! Link Share App.");
 });
 
+//error middleware
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error(err.message);
+  res.status(400).json({ message: err.message });
+});
+
 // Start server
 const PORT: number = parseInt(process.env.PORT as string, 10) || 3000;
 

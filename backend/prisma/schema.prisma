@@ -34,9 +34,10 @@ model Profile {
 
 model SaveSocialLinks {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String?
   platform  String
   link      String
+  order     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
