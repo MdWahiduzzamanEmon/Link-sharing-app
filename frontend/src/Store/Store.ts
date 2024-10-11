@@ -1,14 +1,13 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { apiSlice } from "./api/apiSlice";
-
-const rootReducer = combineReducers({
-  [apiSlice.reducerPath]: apiSlice.reducer,
-});
+import globalSlice from "./feature/globalSlice";
 
 export const store = configureStore({
-  reducer: rootReducer,
-
+  reducer: {
+    [apiSlice.reducerPath]: apiSlice.reducer,
+    globalSlice,
+  },
   devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({}).concat(apiSlice.middleware),

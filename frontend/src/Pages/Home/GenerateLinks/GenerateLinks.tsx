@@ -9,10 +9,13 @@ import {
 import LinkCard from "./LinkCard/LinkCard";
 import Loader from "../../../Shared/Loader/Loader";
 import { DEFAULT, validateLink } from "../../../constant";
+import { useAppDispatch } from "../../../Store/Store";
+import { setLinksStore } from "../../../Store/feature/globalSlice";
 
 // Helper function to validate URLs based on platform
 
 const GenerateLinks = () => {
+  const dispatch = useAppDispatch();
   const [links, setLinks] = useState(DEFAULT);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
@@ -41,8 +44,10 @@ const GenerateLinks = () => {
       } else {
         setLinks(links);
       }
+
+      dispatch(setLinksStore(newLinks));
     }
-  }, [getLinkSucess, getLink?.data]);
+  }, [getLinkSucess, getLink?.data, dispatch]);
 
   // Handle Add New Link
   const handleAddLink = () => {

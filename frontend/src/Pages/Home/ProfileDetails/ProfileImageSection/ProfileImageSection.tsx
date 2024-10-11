@@ -38,7 +38,7 @@ const ProfileImageSection = ({
           id="image"
           accept="image/png, image/jpg, image/bmp"
           onChange={(e) => {
-            console.log(e.target.files);
+            // console.log(e.target.files);
             if (e.target.files && e.target.files[0]) {
               handleGetImageWithValidation(e.target.files[0]);
             }
@@ -57,7 +57,11 @@ const ProfileImageSection = ({
         {profileImage && (
           <div className="relative">
             <img
-              src={URL.createObjectURL(profileImage)}
+              src={
+                profileImage instanceof File
+                  ? URL.createObjectURL(profileImage)
+                  : profileImage
+              }
               alt="profile image"
               className="lg:w-[180px] lg:h-[180px] w-[150px] h-[150px] border-2 border-gray-400 rounded-lg object-cover"
             />

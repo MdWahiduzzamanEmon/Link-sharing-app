@@ -82,10 +82,10 @@ profileRouter.get(
 //get single profile by email
 
 profileRouter.get(
-  "/profile",
+  "/get-profile/:email",
   async (req: Request, res: Response, next: any) => {
     try {
-      const { email } = req.body as any;
+      const { email } = req.params;
 
       if (!email) {
         return next(new Error("Please add email"));

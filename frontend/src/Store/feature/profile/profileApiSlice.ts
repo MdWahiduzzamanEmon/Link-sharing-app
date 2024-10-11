@@ -12,7 +12,11 @@ const profileApiSlice = apiSlice.injectEndpoints({
       invalidatesTags?: string[];
     }) => any;
     query: (arg0: {
-      query: () => { url: string; method: string };
+      query: ({ email }: { email: string }) => {
+        url: string;
+        method: string;
+        body?: any;
+      };
       providesTags?: string[];
     }) => any;
   }) => ({
@@ -28,9 +32,9 @@ const profileApiSlice = apiSlice.injectEndpoints({
 
     //getLinks
 
-    getProfile: builder.query({
-      query: () => ({
-        url: "/profile",
+    getProfileData: builder.query({
+      query: ({ email }: { email: string }) => ({
+        url: `/get-profile/${email}`,
         method: "GET",
       }),
 
@@ -39,4 +43,5 @@ const profileApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useCreateProfileMutation, useGetProfileQuery } = profileApiSlice;
+export const { useCreateProfileMutation, useGetProfileDataQuery } =
+  profileApiSlice;
