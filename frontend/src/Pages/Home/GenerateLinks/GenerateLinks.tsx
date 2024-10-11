@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CustomButton from "../../../Shared/CustomButton/CustomButton";
-import CustomSelect from "../../../Shared/CustomSelect/CustomSelect";
 import Swal from "sweetalert2";
 import {
-  useDeleteOneLinkMutation,
   useGetLinksQuery,
   usePostLinkMutation,
 } from "../../../Store/feature/Link/LinkApiSlice";
+import LinkCard from "./LinkCard/LinkCard";
+import Loader from "../../../Shared/Loader/Loader";
 
 // Helper function to validate URLs based on platform
 
@@ -15,7 +15,7 @@ interface VALIDATE_LINK {
   url: string;
 }
 
-const validateLink = ({ platform, url }: VALIDATE_LINK) => {
+export const validateLink = ({ platform, url }: VALIDATE_LINK) => {
   let isValid = false;
   const isMatched =
     url?.includes(platform?.toLowerCase()) &&
@@ -26,13 +26,17 @@ const validateLink = ({ platform, url }: VALIDATE_LINK) => {
   return isValid;
 };
 
-const GenerateLinks = () => {
-  const [links, setLinks] = useState([
-    { id: 1, platform: "", url: "" },
-    // { id: 2, platform: "LinkedIn", url: "https://linkedin.com/in/myprofile" },
-  ]);
+export const DEFAULT = [{ id: 1, platform: "", url: "" }];
 
-  const { data: getLink, isSuccess: getLinkSucess } = useGetLinksQuery(
+const GenerateLinks = () => {
+  const [links, setLinks] = useState(DEFAULT);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+
+  const {
+    data: getLink,
+    isSuccess: getLinkSucess,
+    isLoading: getLinkLoading,
+  } = useGetLinksQuery(
     {},
     {
       refetchOnMountOrArgChange: true,
@@ -56,44 +60,10 @@ const GenerateLinks = () => {
     }
   }, [getLinkSucess, getLink?.data]);
 
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-
   // Handle Add New Link
   const handleAddLink = () => {
     const newLink = { id: links?.length + 1, platform: "", url: "" };
     setLinks([newLink, ...links]);
-  };
-
-  const [deleteOneLink, { isLoading: isDeleteLinkLoading }] =
-    useDeleteOneLinkMutation();
-  // Handle Remove Link
-  const handleRemoveLink = async (link: any) => {
-    const res = await Swal.fire({
-      title: "Are you sure?",
-      text: "You want to delete this link!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    });
-
-    if (res.isConfirmed) {
-      // delete link
-      const result = await deleteOneLink(link?.deleteId).unwrap();
-      if (result?.status === 200) {
-        Swal.fire("Deleted!", "Your link has been deleted.", "success");
-        // remove link from state
-        const newData = links.filter((l) => l.id !== link?.id);
-        if (newData?.length > 0) {
-          setLinks(newData);
-        } else {
-          setLinks([{ id: 1, platform: "", url: "" }]);
-        }
-      } else {
-        Swal.fire("Failed!", "Something went wrong.", "error");
-      }
-    }
   };
 
   // Handle input change
@@ -118,6 +88,29 @@ const GenerateLinks = () => {
     reorderedLinks.splice(index, 0, draggedLink);
 
     setLinks(reorderedLinks);
+    console.log("links", reorderedLinks);
+    // get current position and new position
+    // {
+    //   "items": [
+    //     { "id": 1, "newPosition": 1 },
+    //     { "id": 3, "newPosition": 2 },
+    //     { "id": 2, "newPosition": 3 }
+    //   ]
+    // }
+
+    if (reorderedLinks?.length > 0) {
+      const data = {
+        items: reorderedLinks?.map((link: any, index: number) => {
+          return {
+            ...link,
+            newPosition: index + 1,
+          };
+        }),
+      };
+
+      console.log("data", data);
+    }
+
     setDraggedIndex(null); // Reset the dragged index
   };
 
@@ -139,7 +132,7 @@ const GenerateLinks = () => {
       return {
         platform: link?.platform,
         link: link?.url,
-        order: link?.id,
+        order: getLink?.data?.length + 1,
       };
     });
 
@@ -152,7 +145,7 @@ const GenerateLinks = () => {
           icon: "success",
           confirmButtonText: "Ok",
         });
-        // setLinks([{ id: 1, platform: "", url: "" }]);
+        setLinks([{ id: 1, platform: "", url: "" }]);
       } else {
         Swal.fire({
           title: "Something went wrong",
@@ -190,77 +183,26 @@ const GenerateLinks = () => {
 
         {/* Links List */}
         <section className="h-[500px] overflow-y-auto">
-          {links?.length > 0 ? (
-            links?.map((link, index) => (
-              <div
-                key={link.id}
-                draggable
-                onDragStart={() => handleDragStart(index)}
-                onDragOver={handleDragOver}
-                onDrop={() => handleDrop(index)}
-                className="bg-gray-100 p-3 my-4 rounded-xl"
-              >
-                <section
-                  className="flex items-center justify-between mb-2"
-                  style={{ userSelect: "none" }}
-                >
-                  {/* Drag Icon and Label */}
-                  <div className="flex items-center text-[13px] text-gray-500 font-bold">
-                    <span className="mr-3 cursor-move">⠿</span>{" "}
-                    {/* Drag Icon */}
-                    <span>{`Link #${link?.id}`}</span>
-                  </div>
-                  {/* Remove Button */}
-                  <button
-                    onClick={() => handleRemoveLink(link)}
-                    className="text-gray-500 ml-3 text-[13px] text-semibold hover:text-red-500"
-                  >
-                    {isDeleteLinkLoading ? "Deleting..." : "Remove"}
-                  </button>
-                </section>
-                <section className="flex justify-between flex-col gap-5 w-full">
-                  {/* Select Platform */}
-                  <CustomSelect
-                    label={`Platform`}
-                    value={link?.platform}
-                    onChange={(e) =>
-                      handleInputChange(link?.id, "platform", e.target.value)
-                    }
-                  />
+          {/* show loading */}
+          {getLinkLoading && <Loader />}
 
-                  {/* URL Input */}
-                  <section>
-                    <label
-                      htmlFor="url"
-                      className="block font-medium text-gray-700 mb-2 text-[13px]"
-                    >
-                      Link
-                    </label>
-                    <input
-                      id="url"
-                      type="url"
-                      placeholder="Enter link URL"
-                      value={link.url}
-                      onChange={(e) =>
-                        handleInputChange(link.id, "url", e.target.value)
-                      }
-                      className={`border p-2 rounded w-full ${
-                        link.platform &&
-                        !validateLink({
-                          platform: link.platform,
-                          url: link.url,
-                        })
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      }`}
-                    />
-                  </section>
-                </section>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-400 text-center">No links added</p>
-          )}
+          {!getLinkLoading && links?.length > 0
+            ? links?.map((link, index) => (
+                <LinkCard
+                  key={link?.id}
+                  link={link}
+                  index={index}
+                  links={links}
+                  setLinks={setLinks}
+                  handleInputChange={handleInputChange}
+                  handleDragStart={handleDragStart}
+                  handleDrop={handleDrop}
+                  handleDragOver={handleDragOver}
+                />
+              ))
+            : !getLinkLoading && (
+                <p className="text-gray-400 text-center">No links added</p>
+              )}
         </section>
 
         {/* Save Button */}

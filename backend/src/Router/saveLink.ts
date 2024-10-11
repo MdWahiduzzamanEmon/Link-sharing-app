@@ -14,7 +14,7 @@ linkSaveRouter.post(
   async (req: Request, res: Response, next: any) => {
     try {
       const { body } = req as any;
-      if (Object.keys(body).length === 0) {
+      if (Object.keys(body)?.length === 0) {
         return next(new Error("Body is empty.Please add some data"));
       }
 
