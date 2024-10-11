@@ -19,7 +19,7 @@ const router = [
     ),
     children: [
       {
-        path: "home",
+        path: "/",
         element: (
           <SuspenseGlobal>
             <Home />
