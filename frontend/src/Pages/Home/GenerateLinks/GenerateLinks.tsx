@@ -83,7 +83,11 @@ const GenerateLinks = () => {
 
   const [
     reorderLink,
-    { isLoading: reorderLinkLoading, isSuccess: reorderLinkSuccess },
+    {
+      isLoading: reorderLinkLoading,
+      isSuccess: reorderLinkSuccess,
+      isError: reorderLinkError,
+    },
   ] = useReorderLinkMutation();
 
   useEffect(() => {
@@ -91,6 +95,12 @@ const GenerateLinks = () => {
       Swal.fire("Success", "Link Re-ordered Successfully", "success");
     }
   }, [reorderLinkSuccess]);
+
+  useEffect(() => {
+    if (reorderLinkError) {
+      setLinks(links);
+    }
+  }, [reorderLinkError]);
 
   // Handle drop
   const handleDrop = (index: number) => {
@@ -114,7 +124,7 @@ const GenerateLinks = () => {
       const data = {
         items: reorderedLinks?.map((link: any, index) => ({
           id: link?.id,
-          orderIdNewPosition: index + 1,
+          newPosition: index + 1,
         })),
       };
 

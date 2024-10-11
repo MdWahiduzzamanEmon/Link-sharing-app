@@ -30,7 +30,7 @@ export const deleteAllLinks = async () => {
 export const deleteOneLink = async (id: string) => {
   const result = db.saveSocialLinks.delete({
     where: {
-      id: id,
+      id: parseInt(id),
     },
   });
 
@@ -38,14 +38,15 @@ export const deleteOneLink = async (id: string) => {
 };
 
 export const reorderLinks = async (data: any[]) => {
+  console.log(data);
   const [result] = await Promise.all(
     data?.map((link: any) => {
       return db.saveSocialLinks.update({
         where: {
-          order: link?.orderIdNewPosition,
+          id: parseInt(link?.id),
         },
         data: {
-          order: link?.orderIdNewPosition,
+          order: link?.newPosition,
         },
       });
     })
