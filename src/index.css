@@ -17,3 +17,8 @@
 body {
   background-color: #dfdfdf20;
 }
+
+.swal2-popup {
+  font-size: 0.8rem !important;
+  font-family: Georgia, serif;
+}

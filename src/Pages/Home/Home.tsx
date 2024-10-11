@@ -11,7 +11,7 @@ const Home = () => {
       <section className="my-4 grid gap-5 ">
         <div
           className="hidden bg-white overflow-y-auto p-5 rounded-lg shadow-sm 
-        h-[70vh] lg:h-[70vh] lg:col-span-1 items-center justify-center lg:flex lg:col-start-1 lg:col-end-2 lg:row-span-1 lg:row-start-1 lg:row-end-2
+         lg:col-span-1 items-center justify-center lg:flex lg:col-start-1 lg:col-end-2 lg:row-span-1 lg:row-start-1 lg:row-end-2
         "
         >
           <img
