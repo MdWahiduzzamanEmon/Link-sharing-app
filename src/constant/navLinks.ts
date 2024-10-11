@@ -4,7 +4,7 @@ const navLinks = [
   //     path: "/",
   //   },
   {
-    name: "Generate Links",
+    name: "Links",
     path: "generate-links",
   },
   {
