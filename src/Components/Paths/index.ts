@@ -6,4 +6,8 @@ const GenerateLinks = React.lazy(
   () => import("../../Components/GenerateLinks/GenerateLinks")
 );
 
-export { Home, Error, GenerateLinks };
+const ProfileDetails = React.lazy(
+  () => import("../../Components/ProfileDetails/ProfileDetails")
+);
+
+export { Home, Error, GenerateLinks, ProfileDetails };

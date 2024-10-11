@@ -1,33 +1,51 @@
 import React from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 import SuspenseGlobal from "../Components/Suspense/Suspense";
-import { Error, GenerateLinks, Home } from "../Components/Paths";
+import {
+  Error,
+  GenerateLinks,
+  Home,
+  ProfileDetails,
+} from "../Components/Paths";
 // import Error from "../Components/Error/Error";
 
 const router = [
   {
     path: "/",
+    element: (
+      <SuspenseGlobal>
+        <Outlet /> {/* Outlet for rendering child routes */}
+      </SuspenseGlobal>
+    ),
     children: [
       {
-        path: "/",
-        index: true,
+        path: "home",
         element: (
           <SuspenseGlobal>
             <Home />
           </SuspenseGlobal>
         ),
+        children: [
+          //Links
+          {
+            path: "generate-links",
+            element: (
+              <SuspenseGlobal>
+                <GenerateLinks />
+              </SuspenseGlobal>
+            ),
+          },
+          //profile details
+          {
+            path: "profile-details",
+            element: (
+              <SuspenseGlobal>
+                <ProfileDetails />
+              </SuspenseGlobal>
+            ),
+          },
+        ],
       },
-      //Links
-      {
-        path: "/generate-links",
-        element: (
-          <SuspenseGlobal>
-            <GenerateLinks />
-          </SuspenseGlobal>
-        ),
-      },
-
-      //profile details
 
       // 404
       {
