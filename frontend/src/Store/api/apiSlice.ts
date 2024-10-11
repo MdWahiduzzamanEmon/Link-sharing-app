@@ -41,6 +41,6 @@ export const apiSlice = createApi({
   baseQuery: baseQueryWithRetry as unknown as BaseQueryFn<unknown, unknown, {}>,
 
   endpoints: () => ({}),
-  tagTypes: ["links"],
+  tagTypes: ["links", "profile"],
   refetchOnReconnect: true,
 }) as any;
