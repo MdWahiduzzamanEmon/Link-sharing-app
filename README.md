@@ -1,50 +1,90 @@
-# React + TypeScript + Vite
+# Link Sharing App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a full-stack application where users can register, log in, and share links. It features a React frontend, TailwindCSS styling, and a backend powered by Node.js, Express, and Prisma ORM. The app uses PostgreSQL as the database.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Installation](#installation)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
+- [Usage](#usage)
+- [Authentication](#authentication)
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Frontend
 
-- Configure the top-level `parserOptions` property like this:
+Navigate to the frontend directory:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+cd frontend
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Install the dependencies:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+Start the frontend development server:
+
+```bash
+npm run dev
+```
+
+The frontend will be accessible at http://localhost:5173/.
+
+### Backend
+
+Navigate to the backend directory:
+
+```bash
+cd backend
+```
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Ensure the PostgreSQL database is set up and configured in `.env` (see below for `.env` configuration).
+
+Start the backend development server:
+
+```bash
+npm run start:dev
+```
+
+The backend will be accessible at http://localhost:4000/linkShare
+
+## Usage
+
+After setting up both the frontend and backend, the application should be running. You can access the frontend UI on the specified port (usually localhost:5173), and interact with the backend on the API server (usually localhost:4000/linkShare).
+
+## Authentication
+
+The app includes a simple authentication system where users can:
+
+- Register – Create a new account with a username and password.
+- Login – Use registered credentials to log in and access the main UI.
+- Save Links - Save links to the database and view them in the main UI.
+- Order Changes - Change the order with drag and drop feature in the main UI.
+- Delete Links - Delete links from the database.
+- Profile - View the profile of the user
+- Preview - Preview the profile of the user and add link share to the profile.
+- Logout - Logout from the application.
+
+### Register
+
+To register a new user, simply navigate to the register page on the frontend and provide the required details (username, email, password).
+
+-password should be atleast 8 characters
+
+### Login
+
+To log in, use the Login page where you can input your credentials (email and password). If the credentials match an existing user in the database, you will be redirected to the main UI.
+
+### Protecting Routes
+
+Once the user logs in, they will receive a JWT token that will be stored in localStorage. This token is used to protect certain routes and ensure only authenticated users can access the main UI and other protected features.
