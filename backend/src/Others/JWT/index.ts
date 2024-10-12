@@ -65,18 +65,6 @@ export const verifyTokenMiddleware = async (req: any, res: any, next: any) => {
   }
 };
 
-/**
- * Sets a cookie with the given token on the response, with the following properties:
- * - `httpOnly`: true (cookie is not accessible by client side)
- * - `secure`: true (cookie can only be transmitted over a secure protocol, i.e. HTTPS)
- * - `sameSite`: "none" (cookie can be sent with cross-site requests)
- * - `maxAge`: 1 hour (cookie will expire in 1 hour)
- *
- * @param {Response} res - the response object
- * @param {string} token - the token to set as the cookie value
- * @returns {Response} the response object with the set cookie
- */
-
 export const cookieResponse = (res: any, token: string) => {
   // expire in 1 hour
   const oneHour = 60 * 60 * 1000;
