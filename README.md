@@ -79,7 +79,7 @@ The app includes a simple authentication system where users can:
 - Save Links - Save links to the database and view them in the main UI.
 - Order Changes - Change the order with drag and drop feature in the main UI.
 - Delete Links - Delete links from the database.
-- Profile - View the profile of the user
+- Profile - View the profile of the user. Added drag and drop feature to change user profile picture.
 - Preview - Preview the profile of the user and add link share to the profile.
 - Logout - Logout from the application.
 
