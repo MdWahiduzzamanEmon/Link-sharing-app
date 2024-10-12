@@ -7,6 +7,7 @@ import {
   getAllProfile,
   getProfileByEmail,
 } from "../Services/profile.service";
+import { verifyTokenMiddleware } from "../Others/JWT";
 
 export const profileRouter = express.Router();
 
@@ -19,15 +20,18 @@ export interface IProfile {
 
 profileRouter.post(
   "/create-profile",
+  verifyTokenMiddleware,
   uploadMiddleware,
   async (req: Request, res: Response, next: any) => {
     try {
-      const { first_name, last_name, email } = req.body as any;
+      const { user } = req as any;
+      const { id: userIdFromToken, email: userEmailFromToken } = user;
+      const { first_name, last_name } = req.body as any;
 
-      if (!first_name || !last_name || !email) {
+      if (!first_name || !last_name) {
         return next(
           new Error(
-            "Please add all fields.[first_name,last_name,email,profile_image]"
+            "Please add all fields.[first_name,last_name,profile_image]"
           )
         );
       }
@@ -35,11 +39,11 @@ profileRouter.post(
       const body = {
         first_name,
         last_name,
-        email,
+        email: userEmailFromToken,
         profile_image,
       } as IProfile;
 
-      const result = await createProfile(body);
+      const result = await createProfile(body, userIdFromToken);
 
       if (!result) {
         return next(new Error("Error creating profile"));
@@ -60,6 +64,7 @@ profileRouter.post(
 
 profileRouter.get(
   "/all-profile",
+  verifyTokenMiddleware,
   async (req: Request, res: Response, next: any) => {
     try {
       const result = await getAllProfile();
@@ -82,25 +87,22 @@ profileRouter.get(
 //get single profile by email
 
 profileRouter.get(
-  "/get-profile/:email",
+  "/get-profile",
+  verifyTokenMiddleware,
   async (req: Request, res: Response, next: any) => {
     try {
-      const { email } = req.params;
+      const { user } = req as any;
+      const { email } = user;
 
-      if (!email) {
-        return next(new Error("Please add email"));
-      }
+      // console.log(email, "email");
 
       const result = await getProfileByEmail(email);
-
-      if (!result) {
-        return next(new Error("Error fetching profile"));
-      }
+      // console.log(result, "result");
 
       res.status(200).json({
         status: 200,
         message: "Profile fetched successfully",
-        data: result,
+        data: result ?? {},
       });
     } catch (err) {
       next(err);

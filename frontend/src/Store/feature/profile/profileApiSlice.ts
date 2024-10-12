@@ -33,8 +33,8 @@ const profileApiSlice = apiSlice.injectEndpoints({
     //getLinks
 
     getProfileData: builder.query({
-      query: ({ email }: { email: string }) => ({
-        url: `/get-profile/${email}`,
+      query: () => ({
+        url: `/get-profile`,
         method: "GET",
       }),
 

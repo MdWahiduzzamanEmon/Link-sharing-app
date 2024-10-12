@@ -5,10 +5,17 @@ import navLinks from "../../constant/navLinks";
 import mainLogo from "../../assets/mainLogo.png";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import useWindowSize from "../../Hook/useWindowSize";
+import { RiLogoutCircleRFill } from "react-icons/ri";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const width = useWindowSize();
+
+  // Function to handle logout
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
 
   return (
     <>
@@ -48,9 +55,17 @@ const Header: React.FC = () => {
         </section>
 
         {/* right section */}
-        <CustomButton color="purple" onClick={() => navigate("/preview")}>
-          {width < 768 ? <MdOutlineRemoveRedEye size={20} /> : "Preview"}
-        </CustomButton>
+        <section className="flex space-x-4">
+          <CustomButton onClick={() => navigate("/preview")}>
+            {width < 768 ? <MdOutlineRemoveRedEye size={20} /> : "Preview"}
+          </CustomButton>
+          <CustomButton
+            color="bg-red-600 hover:bg-red-400 text-white"
+            onClick={() => handleLogout()}
+          >
+            <RiLogoutCircleRFill size={20} />
+          </CustomButton>
+        </section>
       </nav>
     </>
   );

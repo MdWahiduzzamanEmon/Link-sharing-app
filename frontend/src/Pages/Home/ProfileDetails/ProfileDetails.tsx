@@ -14,14 +14,17 @@ import { setProfileData } from "../../../Store/feature/globalSlice";
 const ProfileDetails: FC = () => {
   const dispatch = useAppDispatch();
   const [profileImage, setProfileImage] = React.useState<File | null>(null);
+  const email = JSON.parse(localStorage.getItem("userData") || "{}")?.user
+    ?.email;
+
+  // console.log(email);
+
   const [data, setData] = React.useState<{
     firstName: string;
     lastName: string;
-    email: string;
   }>({
     firstName: "",
     lastName: "",
-    email: "",
   });
 
   const [error, setError] = React.useState<string | null>(null);
@@ -32,10 +35,8 @@ const ProfileDetails: FC = () => {
     isLoading: isProfileDataLoading,
     // error: profileDataError,
     isSuccess: isProfileDataSuccess,
-  } = useGetProfileDataQuery(
-    {
-      email: "wemon30@gmail.com",
-    },
+  } = useGetProfileDataQuery<any>(
+    {},
     {
       refetchOnMountOrArgChange: true,
     }
@@ -48,15 +49,13 @@ const ProfileDetails: FC = () => {
       setData({
         firstName: profileData?.data?.first_name || "",
         lastName: profileData?.data?.last_name || "",
-        email: profileData?.data?.email || "",
       });
-      setProfileImage(profileData?.data?.profile_image?.url || null);
+      setProfileImage(profileData?.data?.profile_image?.url); // Assuming you want to reset the profile image to null if it's a URL
 
       dispatch(setProfileData(profileData?.data));
     }
   }, [
     isProfileDataSuccess,
-    profileData?.data?.email,
     profileData?.data?.first_name,
     profileData?.data?.last_name,
     profileData?.data?.profile_image?.url,
@@ -69,15 +68,13 @@ const ProfileDetails: FC = () => {
   };
 
   //create profile
-  const [
-    createProfile,
-    { isLoading: isSaveLinkLoading, error: saveLinkError, data: saveLink },
-  ] = useCreateProfileMutation();
+  const [createProfile, { isLoading: isSaveLinkLoading }] =
+    useCreateProfileMutation();
 
   const handleSaveLinkInBackendAPI = async () => {
     try {
-      const { firstName, lastName, email } = data;
-      if (!firstName || !lastName || !email) {
+      const { firstName, lastName } = data;
+      if (!firstName || !lastName) {
         return setError("Please add all fields.");
       }
       const body = {
@@ -108,7 +105,6 @@ const ProfileDetails: FC = () => {
         setData({
           firstName: "",
           lastName: "",
-          email: "",
         });
         setError(null);
       } else {
@@ -170,8 +166,9 @@ const ProfileDetails: FC = () => {
                 label="Email*"
                 type="email"
                 name="email"
-                value={data.email}
-                handleChange={handleChange}
+                value={email}
+                disabled={true}
+                // handleChange={handleChange}
                 error={error}
               />
             </section>

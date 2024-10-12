@@ -76,9 +76,9 @@ const Login = () => {
           }
         }
 
-        console.log(res, "res");
+        // console.log(res, "res");
         Swal.fire({
-          position: "top-end",
+          position: "center",
           icon: "success",
           title: "Login Successfully",
           showConfirmButton: false,

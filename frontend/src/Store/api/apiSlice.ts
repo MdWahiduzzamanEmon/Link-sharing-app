@@ -34,7 +34,7 @@ const baseQueryWithRetry = async (
   if (result?.meta?.response?.status === 401) {
     // api.dispatch(logOut());
     localStorage.removeItem("userData");
-
+    window.location.reload();
     return result;
   } else {
     return result;

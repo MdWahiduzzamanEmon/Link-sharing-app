@@ -7,6 +7,7 @@ interface CustomInputProps {
   handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error?: any;
   value?: string;
+  disabled?: boolean;
 }
 
 const CustomInput: FC<CustomInputProps> = ({
@@ -16,6 +17,7 @@ const CustomInput: FC<CustomInputProps> = ({
   handleChange,
   value,
   error,
+  disabled = false,
 }) => {
   return (
     <section className="w-full flex flex-row space-x-5 justify-between items-center lg:gap-2 my-2 lg:px-8  bg-gray-100 rounded-xl">
@@ -25,6 +27,7 @@ const CustomInput: FC<CustomInputProps> = ({
           onChange={handleChange}
           name={name}
           type={type}
+          disabled={disabled}
           value={value || ""}
           className={`w-full p-2 rounded-md bg-white text-gray-500 border border-gray-300 focus:border-main_color/60 focus:shadow-md focus:shadow-main_color/30
        focus:outline-none focus:ring-1 focus:ring-main_color/60 ${
