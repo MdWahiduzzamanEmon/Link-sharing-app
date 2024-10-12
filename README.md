@@ -82,6 +82,7 @@ The app includes a simple authentication system where users can:
 - Profile - View the profile of the user. Added drag and drop feature to change user profile picture.
 - Preview - Preview the profile of the user and add link share to the profile.
 - Logout - Logout from the application.
+- validation - Added validation in the frontend and backend.
 
 ### Register
 
