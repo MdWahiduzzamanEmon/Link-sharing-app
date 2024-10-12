@@ -96,3 +96,10 @@ To log in, use the Login page where you can input your credentials (email and pa
 ### Protecting Routes
 
 Once the user logs in, they will receive a JWT token that will be stored in localStorage. This token is used to protect certain routes and ensure only authenticated users can access the main UI and other protected features.
+
+### Testing Demo User
+
+To test the application without registering, you can use the following demo user credentials:
+
+- email: `wahedemon09@gmail.com`
+- password: `12345678`
