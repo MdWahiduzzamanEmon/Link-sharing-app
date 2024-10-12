@@ -26,7 +26,7 @@ export const platforms = [
 ];
 
 export const getStyle = (platform: string) => {
-  console.log(platform);
+  // console.log(platform);
   switch (platform) {
     case "GitHub":
       return {
