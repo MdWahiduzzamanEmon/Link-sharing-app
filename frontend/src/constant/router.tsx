@@ -11,62 +11,110 @@ import Preview from "../Pages/Preview/Preview";
 // import Error from "../Components/Error/Error";
 
 const router = [
+  // {
+  //   // path: "/",
+  //   // element: (
+  //   //   <SuspenseGlobal>
+  //   //     <Outlet /> {/* Outlet for rendering child routes */}
+  //   //   </SuspenseGlobal>
+  //   // ),
+  //   children: [
+  //     // {
+  //     //   path: "/",
+  //     //   element: (
+  //     //     <SuspenseGlobal>
+  //     //       <Home />
+  //     //     </SuspenseGlobal>
+  //     //   ),
+  //     //   children: [
+  //     //     //Links
+  //     //     {
+  //     //       path: "generate-links",
+  //     //       element: (
+  //     //         <SuspenseGlobal>
+  //     //           <GenerateLinks />
+  //     //         </SuspenseGlobal>
+  //     //       ),
+  //     //     },
+  //     //     //profile details
+  //     //     {
+  //     //       path: "profile-details",
+  //     //       element: (
+  //     //         <SuspenseGlobal>
+  //     //           <ProfileDetails />
+  //     //         </SuspenseGlobal>
+  //     //       ),
+  //     //     },
+  //     //   ],
+  //     // },
+
+  //     // // Preview
+  //     // {
+  //     //   path: "preview",
+  //     //   element: (
+  //     //     <SuspenseGlobal>
+  //     //       <Preview />
+  //     //     </SuspenseGlobal>
+  //     //   ),
+  //     // },
+  //     // // 404
+  //     // {
+  //     //   path: "*",
+  //     //   element: (
+  //     //     <SuspenseGlobal>
+  //     //       <Error />
+  //     //     </SuspenseGlobal>
+  //     //   ),
+  //     // },
+  //   ],
+  // },
+
   {
     path: "/",
     element: (
       <SuspenseGlobal>
-        <Outlet /> {/* Outlet for rendering child routes */}
+        <Home />
       </SuspenseGlobal>
     ),
     children: [
+      //Links
       {
-        path: "/",
+        path: "generate-links",
         element: (
           <SuspenseGlobal>
-            <Home />
-          </SuspenseGlobal>
-        ),
-        children: [
-          //Links
-          {
-            path: "generate-links",
-            element: (
-              <SuspenseGlobal>
-                <GenerateLinks />
-              </SuspenseGlobal>
-            ),
-          },
-          //profile details
-          {
-            path: "profile-details",
-            element: (
-              <SuspenseGlobal>
-                <ProfileDetails />
-              </SuspenseGlobal>
-            ),
-          },
-        ],
-      },
-
-      // Preview
-      {
-        path: "preview",
-        element: (
-          <SuspenseGlobal>
-            <Preview />
+            <GenerateLinks />
           </SuspenseGlobal>
         ),
       },
-      // 404
+      //profile details
       {
-        path: "*",
+        path: "profile-details",
         element: (
           <SuspenseGlobal>
-            <Error />
+            <ProfileDetails />
           </SuspenseGlobal>
         ),
       },
     ],
+  },
+
+  // Preview
+  {
+    path: "preview",
+    element: (
+      <SuspenseGlobal>
+        <Preview />
+      </SuspenseGlobal>
+    ),
+  },
+  // 404
+  {
+    path: "*",
+    element: (
+      <SuspenseGlobal>
+        <Error />
+      </SuspenseGlobal>
+    ),
   },
 ];
 
