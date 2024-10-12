@@ -26,11 +26,13 @@ export const platforms = [
 ];
 
 export const getStyle = (platform: string) => {
+  console.log(platform);
   switch (platform) {
-    case "Github":
+    case "GitHub":
       return {
         style: "bg-black text-white",
-        image: "https://img.icons8.com/ios/50/000000/github.png",
+        image:
+          "https://cdn.pixabay.com/photo/2022/01/30/13/33/github-6980894_960_720.png",
       };
     case "LinkedIn":
       return {
