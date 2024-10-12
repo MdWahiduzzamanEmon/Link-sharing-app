@@ -45,7 +45,10 @@ authRouter.post(
     try {
       await saveUser(body);
       //   console.log(savedUser, "savedUser");
-      return res.status(201).json({ message: "User registered successfully" });
+      return res.status(201).json({
+        status: 201,
+        message: "User created successfully",
+      });
     } catch (error) {
       next(error);
     }

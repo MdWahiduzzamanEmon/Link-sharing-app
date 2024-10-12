@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import mainLogo from "../../../assets/mainLogo.png";
 import CustomButton from "../../../Shared/CustomButton/CustomButton";
+import { useRegisterMutation } from "../../../Store/feature/Auth_slice/AuthApi_Slice";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -35,8 +39,8 @@ const Register = () => {
     if (!password) {
       tempErrors.password = "Password is required";
       valid = false;
-    } else if (password.length < 6) {
-      tempErrors.password = "Password must be at least 6 characters long";
+    } else if (password.length < 8) {
+      tempErrors.password = "Password must be at least 8 characters long";
       valid = false;
     }
 
@@ -44,11 +48,42 @@ const Register = () => {
     return valid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [registerUser, { isLoading }] = useRegisterMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
       // If validation passes, proceed with register logic
-      console.log("Form Submitted", { email, userName, password });
+      const body = {
+        email,
+        userName,
+        password,
+      };
+      try {
+        const res = await registerUser(body)?.unwrap();
+        if (res.status === 201) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "User Registered Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          navigate("/login");
+          setEmail("");
+          setUserName("");
+          setPassword("");
+        }
+      } catch (err) {
+        console.log(err);
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: err?.data.message || "Something went wrong",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     }
   };
 
@@ -137,6 +172,7 @@ const Register = () => {
             variant="filled"
             type="submit"
             className="w-full"
+            loading={isLoading}
           />
         </form>
 
