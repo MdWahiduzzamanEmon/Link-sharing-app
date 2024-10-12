@@ -12,6 +12,14 @@ This is a full-stack application where users can register, log in, and share lin
 
 ## Installation
 
+## Make sure you have installed Node.js in your system.
+
+Clone the repository:
+
+```bash
+git clone https://github.com/MdWahiduzzamanEmon/Link-sharing-app.git
+```
+
 ### Frontend
 
 Navigate to the frontend directory:
