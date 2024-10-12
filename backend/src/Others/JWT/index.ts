@@ -1,6 +1,7 @@
 import jsonwebtoken from "jsonwebtoken";
 //import cookie-parser
 import cookieParser from "cookie-parser";
+import { findUserByEmail } from "../../Services/user.service";
 
 //generate token
 
@@ -41,15 +42,15 @@ export const verifyTokenMiddleware = async (req: any, res: any, next: any) => {
 
   //get token from cookie
   const headerToken = req.headers.authorization;
-  const BearerToken = req.cookies?.token; //get token from cookie
+  // const BearerToken = req.cookies?.token; //get token from cookie
 
-  if (headerToken !== BearerToken) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
+  // if (headerToken !== BearerToken) {
+  //   return res.status(401).json({ message: "Unauthorized" });
+  // }
 
   // console.log(BearerToken, "BearerToken");
 
-  const token = BearerToken?.split(" ")?.[1];
+  const token = headerToken?.split(" ")?.[1];
   // // console.log(token);
   if (!token) {
     res.clearCookie("token");
@@ -57,6 +58,14 @@ export const verifyTokenMiddleware = async (req: any, res: any, next: any) => {
   }
   try {
     const result = await verifyToken(token);
+
+    const { email } = result as any;
+    const user = await findUserByEmail({ email });
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     req.user = result;
     next();
   } catch (error: any) {
@@ -70,7 +79,7 @@ export const cookieResponse = (res: any, token: string) => {
   const oneHour = 60 * 60 * 1000;
   res.cookie("token", token, {
     httpOnly: true, //cookie is not accessible by client side
-    secure: true, //https
+    secure: process.env.NODE_ENV === "production",
     sameSite: "none", //cross site
     maxAge: oneHour, //1 hour
   });

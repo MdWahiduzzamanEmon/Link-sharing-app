@@ -141,11 +141,6 @@ const GenerateLinks = () => {
   const handleSaveLinkInBackendAPI = async () => {
     // Save links in backend API
 
-    // if links array has platform and url then only save the link
-    if (links?.every((link) => !validateLink(link))) {
-      return;
-    }
-
     const newArray: { order: any; id: any; platform: any; link: any }[] = [];
 
     const datas = links?.map((link: any) => {
@@ -161,7 +156,8 @@ const GenerateLinks = () => {
     if (datas?.length > 0) {
       //only null order id save
       datas?.forEach((data: any) => {
-        if (data?.order === null) {
+        // console.log("data", data);
+        if (data?.order === null || data?.order === undefined) {
           newArray.push(data);
         }
       });

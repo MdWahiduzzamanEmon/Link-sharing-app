@@ -11,26 +11,31 @@ import { APIURL } from "../../Base";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: APIURL,
-  // credentials: "include",
   prepareHeaders: async (headers, { getState }: any) => {
-    // const token = getState()?.authSlice?.loginUserData?.access_token;
-    // REFRESH_TOKEN = getState()?.authSlice?.loginUserData?.refresh_token;
-    // if (token) {
-    //   headers.set("Authorization", `Bearer ${token}`);
-    // }
+    const token = JSON.parse(localStorage.getItem("userData") || "{}")?.token;
+    if (token) {
+      headers.set("Authorization", token);
+    }
 
     return headers;
   },
-  credentials: "include", // include, same-origin, omit
+  credentials: "include",
 });
 
-const baseQueryWithRetry = async (args: any, api: any, extraOptions: any) => {
+const baseQueryWithRetry = async (
+  args: Parameters<typeof baseQuery>[0],
+  api: Parameters<typeof baseQuery>[1],
+  extraOptions: Parameters<typeof baseQuery>[2]
+) => {
   const result = await baseQuery(args, api, extraOptions);
   // const dispatch = api.dispatch;
   // console.log(api);
   // console.log('result', result?.meta?.response?.status);
   if (result?.meta?.response?.status === 401) {
     // api.dispatch(logOut());
+    localStorage.removeItem("userData");
+
+    return result;
   } else {
     return result;
   }
@@ -38,9 +43,13 @@ const baseQueryWithRetry = async (args: any, api: any, extraOptions: any) => {
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: baseQueryWithRetry as unknown as BaseQueryFn<unknown, unknown, {}>,
+  baseQuery: baseQueryWithRetry as unknown as BaseQueryFn<
+    unknown,
+    unknown,
+    unknown
+  >,
 
   endpoints: () => ({}),
   tagTypes: ["links", "profile"],
   refetchOnReconnect: true,
-}) as any;
+});

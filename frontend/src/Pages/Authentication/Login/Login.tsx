@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import mainLogo from "../../../assets/mainLogo.png";
 import CustomButton from "../../../Shared/CustomButton/CustomButton";
+import { useLoginMutation } from "../../../Store/feature/Auth_slice/AuthApi_Slice";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
@@ -27,8 +31,8 @@ const Login = () => {
     if (!password) {
       tempErrors.password = "Password is required";
       valid = false;
-    } else if (password.length < 6) {
-      tempErrors.password = "Password must be at least 6 characters long";
+    } else if (password.length < 8) {
+      tempErrors.password = "Password must be at least 8 characters long";
       valid = false;
     }
 
@@ -36,11 +40,65 @@ const Login = () => {
     return valid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [
+    login,
+    { isLoading: loginLoading, isSuccess: loginSuccess, error: loginError },
+  ] = useLoginMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
       // If validation passes, proceed with login logic
-      console.log("Form Submitted", { email, password });
+      const body = {
+        email,
+        password,
+      };
+      try {
+        const res = await login(body).unwrap();
+        if (
+          res &&
+          typeof res === "object" &&
+          "status" in res &&
+          "accessToken" in res &&
+          "user" in res
+        ) {
+          const { status, accessToken, user } = res as {
+            status: number;
+            accessToken: string;
+            user: any;
+          };
+          if (status === 200) {
+            const data = {
+              token: accessToken,
+              user: user,
+            };
+            localStorage.setItem("userData", JSON.stringify(data));
+          }
+        }
+
+        console.log(res, "res");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Login Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/");
+        setEmail("");
+        setPassword("");
+      } catch (err) {
+        console.log(err);
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: err?.data.message || "Something went wrong",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } else {
+      console.log("Validation failed");
     }
   };
 
@@ -106,6 +164,8 @@ const Login = () => {
             variant="filled"
             type="submit"
             className="w-full"
+            loading={loginLoading}
+            disabled={loginLoading}
           />
         </form>
 

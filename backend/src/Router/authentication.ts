@@ -127,7 +127,7 @@ authRouter.post("/login", async (req: Request, res: Response, next: any) => {
     if (!getUniqueUser) {
       return res.status(400).json({
         status: 400,
-        message: `User not found`,
+        message: `User with this email:${email} does not exist`,
       });
     }
 

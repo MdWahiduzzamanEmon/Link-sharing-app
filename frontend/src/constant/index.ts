@@ -14,7 +14,7 @@ export const validateLink = ({ platform, url }: VALIDATE_LINK) => {
   return isValid;
 };
 
-export const DEFAULT = [{ id: 1, platform: "", url: "" }];
+export const DEFAULT = [{ id: 1, platform: "", url: "", order: null }];
 
 export const platforms = [
   "GitHub",

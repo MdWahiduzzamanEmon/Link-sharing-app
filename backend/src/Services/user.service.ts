@@ -19,13 +19,3 @@ export const saveUser = async (body: any) => {
 
   return result;
 };
-
-export const userLogin = async (body: any) => {
-  const result = await db.user.findUnique({
-    where: {
-      email: body?.email,
-    },
-  });
-
-  return result;
-};

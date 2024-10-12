@@ -10,6 +10,7 @@ import {
   ProfileDetails,
   Register,
 } from "../Components/Paths";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
 const router = [
   {
@@ -19,9 +20,11 @@ const router = [
   {
     path: "/",
     element: (
-      <SuspenseGlobal>
-        <Home />
-      </SuspenseGlobal>
+      <PrivateRoute>
+        <SuspenseGlobal>
+          <Home />
+        </SuspenseGlobal>
+      </PrivateRoute>
     ),
     children: [
       //Links
@@ -49,9 +52,11 @@ const router = [
   {
     path: "preview",
     element: (
-      <SuspenseGlobal>
-        <Preview />
-      </SuspenseGlobal>
+      <PrivateRoute>
+        <SuspenseGlobal>
+          <Preview />
+        </SuspenseGlobal>
+      </PrivateRoute>
     ),
   },
 
