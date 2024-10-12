@@ -205,7 +205,7 @@ const GenerateLinks = () => {
       <main className="p-3">
         {/* //top section */}
         <section>
-          <h1 className="text-3xl font-bold mb-1">
+          <h1 className="md:text-3xl text-2xl font-bold mb-1">
             Customize your links
             <span
               className={`${

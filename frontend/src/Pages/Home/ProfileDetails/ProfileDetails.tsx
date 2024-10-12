@@ -129,7 +129,9 @@ const ProfileDetails: FC = () => {
       <main className="p-3">
         {/* //top section */}
         <section>
-          <h1 className="text-3xl font-bold mb-1">Profile Details</h1>
+          <h1 className="md:text-3xl text-2xl font-bold mb-1">
+            Profile Details
+          </h1>
           <small className="text-gray-400">
             Add your details to create a personal touch to your profile
           </small>

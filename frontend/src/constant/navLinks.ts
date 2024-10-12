@@ -1,3 +1,6 @@
+import { FaLink } from "react-icons/fa6";
+import { CgProfile } from "react-icons/cg";
+
 const navLinks = [
   //   {
   //     name: "Home",
@@ -6,10 +9,12 @@ const navLinks = [
   {
     name: "Links",
     path: "generate-links",
+    icon: FaLink,
   },
   {
     name: "Profile Details",
     path: "profile-details",
+    icon: CgProfile,
   },
 ];
 

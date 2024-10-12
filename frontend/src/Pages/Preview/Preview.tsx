@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CustomButton from "../../Shared/CustomButton/CustomButton";
 import { useAppDispatch, useAppSelector } from "../../Store/Store";
 import { useNavigate } from "react-router-dom";
 import { useGetLinksQuery } from "../../Store/feature/Link/LinkApiSlice";
 import { useGetProfileDataQuery } from "../../Store/feature/profile/profileApiSlice";
 import { setLinksStore, setProfileData } from "../../Store/feature/globalSlice";
-import { getStyle, platforms } from "../../constant";
+import { getStyle } from "../../constant";
+import Loader from "../../Shared/Loader/Loader";
 
 const Preview = () => {
+  const [copySuccess, setCopySuccess] = useState<string>(""); // To track copy success status
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { links, profileData } = useAppSelector(
@@ -48,6 +51,30 @@ const Preview = () => {
     }
   }, [dispatch, getLinkSucess, isProfileDataSuccess]);
 
+  // Function to handle the "Share Link" click
+  const handleShareLink = async () => {
+    if (!navigator?.clipboard?.writeText) {
+      return;
+    }
+
+    if (!profileData) {
+      return;
+    }
+
+    const profileLink = `${window?.location?.origin}/preview`; // Generate the profile URL based on some identifier
+    navigator.clipboard
+      .writeText(profileLink) // Copy to clipboard
+      .then(() => {
+        setCopySuccess("Profile link copied to clipboard!");
+        setTimeout(() => {
+          setCopySuccess("");
+        }, 3000);
+      })
+      .catch(() => {
+        setCopySuccess("Failed to copy the link. Please try again.");
+      });
+  };
+
   return (
     <>
       <main className="container mx-auto relative">
@@ -71,7 +98,7 @@ const Preview = () => {
             <CustomButton
               label="Share Link"
               variant="filled"
-              onClick={() => {}}
+              onClick={handleShareLink}
             />
           </section>
         </section>
@@ -95,11 +122,17 @@ const Preview = () => {
               </p>
             </>
           )}
+          {/* // Display copy success message */}
+          {copySuccess && (
+            <p className="text-green-500 text-[14px] mt-2">{copySuccess}</p>
+          )}
 
           {/* //link  */}
           <section className="h-[350px] w-[250px] mt-8 overflow-y-scroll space-y-2">
             {getLinkLoading ? (
-              <p>Loading...</p>
+              <section>
+                <Loader />
+              </section>
             ) : (
               links?.map((link: any) => (
                 <SmallLinkCard key={link?.id} link={link} />

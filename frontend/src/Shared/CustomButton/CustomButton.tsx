@@ -2,7 +2,7 @@ import React from "react";
 
 interface CustomButtonProps {
   children?: React.ReactNode;
-  label: string;
+  label?: string;
   onClick?: () => void;
   color?: string;
   width?: string;
@@ -23,6 +23,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   variant = "outline",
   disabled,
   loading,
+  children,
 }) => {
   return (
     <button
@@ -37,7 +38,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
             : "bg-main_color text-white font-semibold py-2 px-5 rounded-lg focus:shadow-outline  transition duration-300 ease-in-out text-[13px] hover:opacity-90"
         }`}
     >
-      {loading ? "Loading..." : label}
+      {loading ? "Loading..." : children ? children : label}
     </button>
   );
 };
