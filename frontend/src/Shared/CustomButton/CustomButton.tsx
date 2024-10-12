@@ -11,6 +11,7 @@ interface CustomButtonProps {
   variant?: "outline" | "filled";
   disabled?: boolean;
   loading?: boolean;
+  type?: "button" | "submit" | "reset" | undefined;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -24,11 +25,13 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   disabled,
   loading,
   children,
+  type = "button",
 }) => {
   return (
     <button
       onClick={onClick}
       style={style}
+      type={type}
       disabled={loading || disabled}
       className={`${color} ${width} ${className} 
       ${disabled && "opacity-50 hover:opacity-50 cursor-not-allowed"}

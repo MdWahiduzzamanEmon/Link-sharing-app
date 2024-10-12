@@ -1,14 +1,15 @@
 import React from "react";
-import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import SuspenseGlobal from "../Components/Suspense/Suspense";
 import {
   Error,
   GenerateLinks,
   Home,
+  Login,
+  Preview,
   ProfileDetails,
+  Register,
 } from "../Components/Paths";
-import Preview from "../Pages/Preview/Preview";
-// import Error from "../Components/Error/Error";
 
 const router = [
   {
@@ -50,6 +51,24 @@ const router = [
     element: (
       <SuspenseGlobal>
         <Preview />
+      </SuspenseGlobal>
+    ),
+  },
+
+  //authentication
+  {
+    path: "login",
+    element: (
+      <SuspenseGlobal>
+        <Login />
+      </SuspenseGlobal>
+    ),
+  },
+  {
+    path: "register",
+    element: (
+      <SuspenseGlobal>
+        <Register />
       </SuspenseGlobal>
     ),
   },

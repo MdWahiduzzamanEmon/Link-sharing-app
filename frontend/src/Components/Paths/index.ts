@@ -10,4 +10,12 @@ const ProfileDetails = React.lazy(
   () => import("../../Pages/Home/ProfileDetails/ProfileDetails")
 );
 
-export { Home, Error, GenerateLinks, ProfileDetails };
+const Preview = React.lazy(() => import("../../Pages/Preview/Preview"));
+const Login = React.lazy(
+  () => import("../../Pages/Authentication/Login/Login")
+);
+const Register = React.lazy(
+  () => import("../../Pages/Authentication/Register/Register")
+);
+
+export { Home, Error, GenerateLinks, ProfileDetails, Preview, Login, Register };
