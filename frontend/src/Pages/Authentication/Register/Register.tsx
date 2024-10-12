@@ -4,9 +4,11 @@ import CustomButton from "../../../Shared/CustomButton/CustomButton";
 import { useRegisterMutation } from "../../../Store/feature/Auth_slice/AuthApi_Slice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -144,7 +146,7 @@ const Register = () => {
           </div>
 
           {/* Password Field */}
-          <div className="mb-6">
+          <div className="mb-6 relative">
             <label
               htmlFor="password"
               className="block text-gray-700 font-medium text-sm mb-2"
@@ -161,6 +163,17 @@ const Register = () => {
               } focus:ring-main_color shadow-md shadow-main_color/30`}
               placeholder="Enter your password"
             />
+
+            <div
+              className="absolute right-2 top-12 transform -translate-y-1/2 cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <FaRegEye size={20} />
+              ) : (
+                <FaRegEyeSlash size={20} />
+              )}
+            </div>
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}

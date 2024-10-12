@@ -4,9 +4,11 @@ import CustomButton from "../../../Shared/CustomButton/CustomButton";
 import { useLoginMutation } from "../../../Store/feature/Auth_slice/AuthApi_Slice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
@@ -136,7 +138,7 @@ const Login = () => {
           </div>
 
           {/* Password Field */}
-          <div className="mb-6">
+          <div className="mb-6 relative">
             <label
               htmlFor="password"
               className="block text-gray-700 font-medium text-sm mb-2"
@@ -144,15 +146,28 @@ const Login = () => {
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2  ${
                 errors.password ? "border-red-500" : "border-gray-300"
               } focus:ring-main_color shadow-md shadow-main_color/30`}
               placeholder="Enter your password"
             />
+
+            <div
+              className="absolute right-2 top-12 transform -translate-y-1/2 cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <FaRegEye size={20} />
+              ) : (
+                <FaRegEyeSlash size={20} />
+              )}
+            </div>
+
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
