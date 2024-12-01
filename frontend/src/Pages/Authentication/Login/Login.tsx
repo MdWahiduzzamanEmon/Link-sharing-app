@@ -42,10 +42,7 @@ const Login = () => {
     return valid;
   };
 
-  const [
-    login,
-    { isLoading: loginLoading, isSuccess: loginSuccess, error: loginError },
-  ] = useLoginMutation();
+  const [login, { isLoading: loginLoading }] = useLoginMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,7 +86,7 @@ const Login = () => {
         navigate("/");
         setEmail("");
         setPassword("");
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
         Swal.fire({
           position: "top-end",

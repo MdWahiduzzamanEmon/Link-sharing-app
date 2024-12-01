@@ -11,7 +11,7 @@ import { APIURL } from "../../Base";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: APIURL,
-  prepareHeaders: async (headers, { getState }: any) => {
+  prepareHeaders: async (headers) => {
     const token = JSON.parse(localStorage.getItem("userData") || "{}")?.token;
     if (token) {
       headers.set("Authorization", token);

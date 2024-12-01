@@ -2,20 +2,7 @@
 import { apiSlice } from "../../api/apiSlice";
 
 const LinkApiSlice = apiSlice.injectEndpoints({
-  endpoints: (builder: {
-    mutation: (arg0: {
-      query: (body: any) => {
-        url: string;
-        method: string;
-        body?: any;
-      };
-      invalidatesTags?: string[];
-    }) => any;
-    query: (arg0: {
-      query: () => { url: string; method: string };
-      providesTags?: string[];
-    }) => any;
-  }) => ({
+  endpoints: (builder) => ({
     postLink: builder.mutation({
       query: (body: any) => ({
         url: "/saveLinks",

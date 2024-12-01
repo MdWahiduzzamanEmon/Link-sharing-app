@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CustomButton from "../../Shared/CustomButton/CustomButton";
 import { useAppDispatch, useAppSelector } from "../../Store/Store";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ const Preview = () => {
     data: getLink,
     isSuccess: getLinkSucess,
     isLoading: getLinkLoading,
-  } = useGetLinksQuery({});
+  } = useGetLinksQuery({}) as any;
 
   //get profile data
   const {

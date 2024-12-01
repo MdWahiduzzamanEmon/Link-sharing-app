@@ -62,7 +62,7 @@ const Register = () => {
         password,
       };
       try {
-        const res = await registerUser(body)?.unwrap();
+        const res = await registerUser(body)?.unwrap() as any;
         if (res.status === 201) {
           Swal.fire({
             position: "top-end",
@@ -76,7 +76,7 @@ const Register = () => {
           setUserName("");
           setPassword("");
         }
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
         Swal.fire({
           position: "top-end",

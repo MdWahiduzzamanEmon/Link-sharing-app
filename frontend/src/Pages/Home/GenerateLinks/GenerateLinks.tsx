@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CustomButton from "../../../Shared/CustomButton/CustomButton";
 import Swal from "sweetalert2";
 import {
@@ -28,7 +28,7 @@ const GenerateLinks = () => {
     {
       refetchOnMountOrArgChange: true,
     }
-  );
+  ) as any;
 
   useEffect(() => {
     if (getLinkSucess) {
@@ -76,11 +76,7 @@ const GenerateLinks = () => {
 
   const [
     reorderLink,
-    {
-      isLoading: reorderLinkLoading,
-      isSuccess: reorderLinkSuccess,
-      isError: reorderLinkError,
-    },
+    { isLoading: reorderLinkLoading, isError: reorderLinkError },
   ] = useReorderLinkMutation();
 
   // useEffect(() => {
@@ -178,7 +174,7 @@ const GenerateLinks = () => {
           icon: "success",
           confirmButtonText: "Ok",
         });
-        setLinks([{ id: 1, platform: "", url: "" }]);
+        setLinks([{ id: 1, platform: "", url: "", order: null }]);
       } else {
         Swal.fire({
           title: "Something went wrong",
